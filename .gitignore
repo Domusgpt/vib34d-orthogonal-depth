@@ -1,0 +1,74 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build outputs
+dist/
+build/
+_site/
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Editor directories and files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+logs
+*.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+
+# Coverage directory used by tools like istanbul
+coverage/
+
+# Temporary folders
+tmp/
+temp/
+
+# Windows specific
+*.lnk
+
+# macOS specific
+.AppleDouble
+.LSOverride
+
+# Backup files
+*.backup
+*.bak
+*.old
+
+# VIB34D specific ignores
+*.cache
+.vib34d-cache/
+
+# Archive directories (keeping for historical reference but not tracking)
+ARCHIVE/
+archive/
+backup-*/
+
+# Paul Phillips signature tracking exceptions
+!PAUL_PHILLIPS_SIGNATURE.md
+!ATTRIBUTION.md

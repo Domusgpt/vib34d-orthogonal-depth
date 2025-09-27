@@ -1,0 +1,187 @@
+name: Deploy VIB34D to GitHub Pages
+
+on:
+  push:
+    branches: [ main, variant-b, experimental ]
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Create deployment structure
+        run: |
+          # Create deployment directory
+          mkdir -p _site
+
+          # Copy all files to deployment directory
+          cp -r . _site/
+
+          # Remove .git and .github from deployment
+          rm -rf _site/.git _site/.github
+
+          # Create branch-specific deployments for comparison
+          if [ "${{ github.ref_name }}" = "main" ]; then
+            echo "Deploying main branch to root"
+          elif [ "${{ github.ref_name }}" = "variant-b" ]; then
+            mkdir -p _site/variant-b
+            cp -r . _site/variant-b/
+            rm -rf _site/variant-b/.git _site/variant-b/.github
+          elif [ "${{ github.ref_name }}" = "experimental" ]; then
+            mkdir -p _site/experimental
+            cp -r . _site/experimental/
+            rm -rf _site/experimental/.git _site/experimental/.github
+          fi
+
+          # Create comparison index
+          cat > _site/comparison.html << EOF
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>VIB34D Version Comparison</title>
+              <style>
+                  body {
+                      font-family: 'Inter', sans-serif;
+                      background: #0a0a0a;
+                      color: white;
+                      padding: 40px;
+                      margin: 0;
+                  }
+                  .container { max-width: 1200px; margin: 0 auto; }
+                  .title {
+                      font-size: 3rem;
+                      background: linear-gradient(135deg, #00ffff, #ff00ff);
+                      -webkit-background-clip: text;
+                      -webkit-text-fill-color: transparent;
+                      text-align: center;
+                      margin-bottom: 40px;
+                  }
+                  .version-grid {
+                      display: grid;
+                      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+                      gap: 30px;
+                      margin-top: 40px;
+                  }
+                  .version-card {
+                      background: rgba(0, 255, 255, 0.1);
+                      border: 2px solid rgba(0, 255, 255, 0.3);
+                      border-radius: 15px;
+                      padding: 30px;
+                      transition: all 0.3s ease;
+                  }
+                  .version-card:hover {
+                      border-color: #00ffff;
+                      transform: translateY(-5px);
+                      box-shadow: 0 10px 30px rgba(0, 255, 255, 0.2);
+                  }
+                  .version-title {
+                      font-size: 1.5rem;
+                      font-weight: 700;
+                      color: #00ffff;
+                      margin-bottom: 15px;
+                  }
+                  .version-description {
+                      color: rgba(255, 255, 255, 0.8);
+                      margin-bottom: 20px;
+                      line-height: 1.6;
+                  }
+                  .version-link {
+                      display: inline-block;
+                      padding: 10px 20px;
+                      background: rgba(0, 255, 255, 0.2);
+                      border: 1px solid #00ffff;
+                      border-radius: 8px;
+                      color: #00ffff;
+                      text-decoration: none;
+                      font-weight: 600;
+                      transition: all 0.3s ease;
+                  }
+                  .version-link:hover {
+                      background: rgba(0, 255, 255, 0.3);
+                  }
+                  .signature {
+                      text-align: center;
+                      margin-top: 60px;
+                      color: rgba(255, 255, 255, 0.6);
+                  }
+              </style>
+          </head>
+          <body>
+              <div class="container">
+                  <h1 class="title">VIB34D Version Comparison</h1>
+                  <p style="text-align: center; font-size: 1.2rem; color: rgba(255, 255, 255, 0.8);">
+                      Compare different versions of the VIB34D Orthogonal Depth Progression System
+                  </p>
+
+                  <div class="version-grid">
+                      <div class="version-card">
+                          <div class="version-title">Main Version</div>
+                          <div class="version-description">
+                              Primary deployment with full VIB34D integration, maximum choreography responsiveness,
+                              and complete background visualizer reactions.
+                          </div>
+                          <a href="./25-orthogonal-depth-progression.html" class="version-link">Launch Main</a>
+                      </div>
+
+                      <div class="version-card">
+                          <div class="version-title">Variant B</div>
+                          <div class="version-description">
+                              Alternative parameter mappings with different choreography sensitivity settings
+                              and modified visual effect intensities.
+                          </div>
+                          <a href="./variant-b/25-orthogonal-depth-progression.html" class="version-link">Launch Variant B</a>
+                      </div>
+
+                      <div class="version-card">
+                          <div class="version-title">Experimental</div>
+                          <div class="version-description">
+                              Latest experimental features and development enhancements.
+                              May include cutting-edge VIB34D implementations.
+                          </div>
+                          <a href="./experimental/25-orthogonal-depth-progression.html" class="version-link">Launch Experimental</a>
+                      </div>
+                  </div>
+
+                  <div class="signature">
+                      <p><strong>A Paul Phillips Manifestation</strong></p>
+                      <p>© 2025 Paul Phillips - Clear Seas Solutions LLC</p>
+                  </div>
+              </div>
+          </body>
+          </html>
+          EOF
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '_site'
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

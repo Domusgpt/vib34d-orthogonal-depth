@@ -243,6 +243,15 @@ class VIB34DTiltVisualizer {
 
         // VIB34D Parameters from Paul Phillips' system
         this.parameters = this.getVIB34DParametersForSystem(systemType);
+        this.baseParameters = { ...this.parameters };
+
+        // Choreography parameters for dynamic updates
+        this.choreographyParameters = {
+            gridDensity: this.parameters.gridDensity,
+            morphFactor: this.parameters.morphFactor,
+            chaos: this.parameters.chaos,
+            intensity: this.parameters.intensity
+        };
 
         this.init();
     }
@@ -304,6 +313,20 @@ class VIB34DTiltVisualizer {
 
     updateRotation4D(rotation4D) {
         this.rotation4D = { ...rotation4D };
+    }
+
+    updateChoreographyParameters(choreographyParams) {
+        // Smoothly update choreography parameters
+        this.choreographyParameters.gridDensity = choreographyParams.gridDensity || this.baseParameters.gridDensity;
+        this.choreographyParameters.morphFactor = choreographyParams.morphFactor || this.baseParameters.morphFactor;
+        this.choreographyParameters.chaos = choreographyParams.chaos || this.baseParameters.chaos;
+        this.choreographyParameters.intensity = choreographyParams.intensity || this.baseParameters.intensity;
+
+        // Blend choreography with base parameters
+        this.parameters.gridDensity = this.choreographyParameters.gridDensity;
+        this.parameters.morphFactor = this.choreographyParameters.morphFactor;
+        this.parameters.chaos = this.choreographyParameters.chaos;
+        this.parameters.intensity = this.choreographyParameters.intensity;
     }
 
     startRenderLoop() {

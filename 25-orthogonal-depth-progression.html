@@ -16,6 +16,9 @@
     <!-- ORTHOGONAL DEPTH PROGRESSION ENGINE -->
     <script src="scripts/orthogonal-depth-progression.js" defer></script>
 
+    <!-- BACKGROUND VISUALIZER REACTIONS -->
+    <script src="scripts/background-visualizer-reactions.js" defer></script>
+
     <style>
         * {
             margin: 0;
@@ -41,6 +44,19 @@
             height: 100vh;
             perspective: var(--depth-perspective);
             perspective-origin: center center;
+            position: relative;
+        }
+
+        /* BACKGROUND VISUALIZER CANVAS */
+        .background-visualizer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.8;
+            pointer-events: none;
         }
 
         /* ORTHOGONAL PROGRESSION CONTAINER */
@@ -297,6 +313,9 @@
 </head>
 <body>
 
+    <!-- BACKGROUND VISUALIZER CANVAS -->
+    <canvas class="background-visualizer" id="backgroundVisualizer"></canvas>
+
     <!-- GEOMETRIC TILT INDICATOR -->
     <div class="tilt-indicator">
         <div>Tilt X: <span id="tilt-x">0</span>°</div>
@@ -377,6 +396,10 @@
             // Initialize geometric tilt system
             if (window.VIB34DGeometricTiltSystem) {
                 window.geometricTiltSystem = new VIB34DGeometricTiltSystem();
+                // Enable geometric tilt immediately
+                setTimeout(() => {
+                    window.geometricTiltSystem.enable();
+                }, 500);
             }
 
             // Initialize orthogonal depth progression
@@ -385,6 +408,7 @@
             }
 
             console.log('✅ VIB34D Systems initialized - Professional Avant-garde Mode Active');
+            console.log('🎨 All systems: Choreographed movements, Background reactions, Birth/Death flourishes');
         });
     </script>
 
