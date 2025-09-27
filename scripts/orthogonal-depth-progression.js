@@ -36,12 +36,12 @@ class OrthogonalDepthProgression {
             choreographyIntensity: 0
         };
 
-        // VIB34D parameter mapping for choreography
+        // VIB34D parameter mapping for choreography (Variant B - Enhanced Ranges)
         this.vib34dMappings = {
-            scrollToGridDensity: { min: 8, max: 45, current: 20 },
-            depthToMorphFactor: { min: 0.5, max: 2.5, current: 1.0 },
-            velocityToChaos: { min: 0.1, max: 0.8, current: 0.3 },
-            momentumToIntensity: { min: 0.3, max: 1.2, current: 0.7 }
+            scrollToGridDensity: { min: 12, max: 55, current: 25 },
+            depthToMorphFactor: { min: 0.8, max: 3.0, current: 1.3 },
+            velocityToChaos: { min: 0.15, max: 0.9, current: 0.4 },
+            momentumToIntensity: { min: 0.5, max: 1.5, current: 0.9 }
         };
 
         this.backgroundVisualizer = null;

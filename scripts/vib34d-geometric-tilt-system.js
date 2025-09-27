@@ -22,14 +22,14 @@ class VIB34DGeometricTiltSystem {
             rot4dZW: 0.0
         };
 
-        // Tilt sensitivity and smoothing
+        // Tilt sensitivity and smoothing (Variant B - Enhanced Sensitivity)
         this.sensitivity = {
-            rot4dXW: 0.02,  // Beta (front-back) -> 4D X-W rotation
-            rot4dYW: 0.02,  // Gamma (left-right) -> 4D Y-W rotation
-            rot4dZW: 0.01   // Alpha (compass) -> 4D Z-W rotation
+            rot4dXW: 0.035,  // Beta (front-back) -> 4D X-W rotation - INCREASED
+            rot4dYW: 0.035,  // Gamma (left-right) -> 4D Y-W rotation - INCREASED
+            rot4dZW: 0.018   // Alpha (compass) -> 4D Z-W rotation - INCREASED
         };
 
-        this.smoothing = 0.15;
+        this.smoothing = 0.12; // Slightly more responsive
         this.visualizers = new Map();
         this.isSupported = this.checkDeviceOrientationSupport();
 
